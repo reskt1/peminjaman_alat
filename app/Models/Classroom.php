@@ -12,7 +12,13 @@ class Classroom extends Model
         'level',
         'is_active'
     ];
-    public function major(){
+     public function major()
+    {
         return $this->belongsTo(Major::class);
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
     }
 }

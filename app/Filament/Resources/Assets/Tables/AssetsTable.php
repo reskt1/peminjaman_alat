@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\Classrooms\Tables;
+namespace App\Filament\Resources\Assets\Tables;
 
-use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -12,28 +10,35 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class ClassroomsTable
+class AssetsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('major.name')
-                    ->label('Major')
-                    ->searchable()
+                TextColumn::make('category_id')
+                    ->numeric()
                     ->sortable(),
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('level')
-                    ->label('Grade')
-                    ->sortable()
-                    ->formatStateUsing(fn($state)=>match($state){
-                        10 => 'Grade X',
-                        11 => 'Grade XI',
-                        12 => 'Grade XII',
-                        13 => 'Grade XIII',
-                    }),
-                IconColumn::make('is_active')
+                TextColumn::make('code')
+                    ->searchable(),
+                TextColumn::make('total_qty')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('good_qty')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('damaged_qty')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('borrowed_qty')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('lost_qty')
+                    ->numeric()
+                    ->sortable(),
+                IconColumn::make('is_available')
                     ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -48,11 +53,8 @@ class ClassroomsTable
                 //
             ])
             ->recordActions([
-                ActionGroup::make([
-                    ViewAction::make(),
-                    EditAction::make(),
-                    DeleteAction::make(),
-                ])
+                ViewAction::make(),
+                EditAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

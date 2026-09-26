@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Classrooms\Tables;
+namespace App\Filament\Resources\Categories\Tables;
 
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
@@ -9,50 +9,52 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\Layout\Grid;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class ClassroomsTable
+class CategoriesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+            ->contentGrid([
+                'xl' => 4,
+                'lg' => 3,
+                'md' => 2,
+            ])
             ->columns([
-                TextColumn::make('major.name')
-                    ->label('Major')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('level')
-                    ->label('Grade')
-                    ->sortable()
-                    ->formatStateUsing(fn($state)=>match($state){
-                        10 => 'Grade X',
-                        11 => 'Grade XI',
-                        12 => 'Grade XII',
-                        13 => 'Grade XIII',
-                    }),
-                IconColumn::make('is_active')
-                    ->boolean(),
+                Grid::make([
+                    'default' => 1
+                ])->schema([
+                    Stack::make([
+                        ImageColumn::make('image')
+                        ->imageSize(200),
+                        TextColumn::make('name')
+                        ->weight('bold')
+                        ->searchable(),
+                    ]),
+                    
+                    ]),
+                TextColumn::make('is_active')
+                    ->formatStateUsing(fn($state) => $state ? 'Active' : 'Inactive')
+                    ->badge()
+                    ->color(fn($state) => $state ? 'Active' : 'Danger'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),
                     DeleteAction::make(),
-                ])
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

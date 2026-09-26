@@ -21,9 +21,15 @@ class ClassroomForm
                     ->options(Major::where('is_active',true)->pluck('name','id')),
                 TextInput::make('name')
                     ->required(),
-                TextInput::make('level')
+                Select::make('level')
                     ->required()
-                    ->numeric(),
+                    ->label('Grade')
+                    ->options([
+                        10 => 'Grade X',
+                        11 => 'Grade XI',
+                        12 => 'Grade XII',
+                        13 => 'Grade XIII',
+                    ]),
                 Toggle::make('is_active')
                     ->required(),
             ]);
